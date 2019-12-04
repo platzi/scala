@@ -19,6 +19,7 @@ class MovieController @Inject()(
 ) extends AbstractController(cc) {
 
   implicit val serializador = Json.format[Movie]
+  val logger = play.Logger.of("MovieController")
 
   def getMovies = Action.async {
     movieRepository.getAll
@@ -29,6 +30,11 @@ class MovieController @Inject()(
         )
         Ok(j)
       })
+      .recover {
+        case ex =>
+          logger.error("Falló en getMovies", ex)
+          InternalServerError(s"Hubo un error: ${ex.getLocalizedMessage}")
+      }
   }
   def getMovie(id: String) = Action.async {
     movieRepository
@@ -40,6 +46,11 @@ class MovieController @Inject()(
         )
         Ok(j)
       })
+      .recover {
+        case ex =>
+          logger.error("Falló en getMovie", ex)
+          InternalServerError(s"Hubo un error: ${ex.getLocalizedMessage}")
+      }
   }
   def createMovie = Action.async(parse.json) { request =>
     val validador = request.body.validate[Movie]
@@ -56,6 +67,11 @@ class MovieController @Inject()(
             )
             Ok(j)
           })
+          .recover {
+            case ex =>
+              logger.error("Falló en createMovie", ex)
+              InternalServerError(s"Hubo un error: ${ex.getLocalizedMessage}")
+          }
       }
     }
 
@@ -75,6 +91,11 @@ class MovieController @Inject()(
             )
             Ok(j)
           })
+          .recover {
+            case ex =>
+              logger.error("Falló en updateMoovie", ex)
+              InternalServerError(s"Hubo un error: ${ex.getLocalizedMessage}")
+          }
       }
     }
 
@@ -89,5 +110,10 @@ class MovieController @Inject()(
         )
         Ok(j)
       })
+      .recover {
+        case ex =>
+          logger.error("Falló en deleteMovie", ex)
+          InternalServerError(s"Hubo un error: ${ex.getLocalizedMessage}")
+      }
   }
 }
