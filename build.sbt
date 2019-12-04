@@ -9,6 +9,8 @@ scalaVersion := "2.13.1"
 
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test
+libraryDependencies += "com.typesafe.play" %% "play-slick" % "4.0.2"
+libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.28.0"
 
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "com.example.controllers._"
